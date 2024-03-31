@@ -9,7 +9,7 @@ from torch.utils.data import Dataset
 
 
 class custom_dataset(Dataset):
-    def __init__(self, mode = "train", root = "datasets/demo_dataset", transforms = None):
+    def __init__(self, mode = "train", root = "datasets/traffic_data", transforms = None):
         super().__init__()
         self.mode = mode
         self.root = root
@@ -34,6 +34,9 @@ class custom_dataset(Dataset):
                 self.label_list.append(label)
         
     def __getitem__(self, index):
+        augmented = index // len(self.image_list)
+        index = index % len(self.image_list)
+
         image_name = self.image_list[index]
         label = self.label_list[index]
         
@@ -42,11 +45,15 @@ class custom_dataset(Dataset):
         if(self.transforms):
             image = self.transforms(image)
         
+        if augmented == 1:
+            image = transforms.RandomHorizontalFlip(p=1)(image)
+            image = transforms.RandomRotation(30)(image)
+
         label = torch.tensor(label)
         
         return image, label
             
     def __len__(self):
-        return len(self.image_list)        
+        return len(self.image_list) * 2 # adding data augmentation      
 
 

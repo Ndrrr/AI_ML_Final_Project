@@ -1,5 +1,6 @@
 template
-datasets/demo_dataset
+datasets/traffic_data
+datasets/labels.csv
 *pth
 __pycache__
 runs

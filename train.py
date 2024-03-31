@@ -22,7 +22,7 @@ pth_name = "saved_model.pth"
 
 def val(model, data_val, loss_function, writer, epoch, device):
     f1score = 0
-    f1 = F1Score(num_classes=53, task = 'multiclass')
+    f1 = F1Score(num_classes=58, task = 'multiclass')
     data_iterator = enumerate(data_val)  # take batches
     f1_list = []
     f1t_list = []
@@ -124,14 +124,14 @@ def train(model, train_loader, val_loader, optimizer, loss_fn, n_epochs, device)
 
 
 def main():
-    device = "cpu"
+    device = "cuda"
     tr = transforms.Compose([
         transforms.ToTensor(),
         transforms.Resize([224, 224])
     ])
 
     train_data = custom_dataset("train", transforms=tr)
-    val_data = custom_dataset("val", transforms= tr)
+    val_data = custom_dataset("validation", transforms= tr)
 
     train_loader = DataLoader(
         train_data,
@@ -146,10 +146,10 @@ def main():
     )
 
     model = ExModel().to(device)   # Initialsing an object of the class.
-    optimizer = SGD(model.parameters(), lr=0.5)
+    optimizer = SGD(model.parameters(), lr=0.4) # .001 for vgg .4 for resnet
     loss = nn.CrossEntropyLoss()
 
-    max_epoch = 15
+    max_epoch = 20
 
 
     train(model, train_loader, val_loader,  optimizer, loss, max_epoch, device)

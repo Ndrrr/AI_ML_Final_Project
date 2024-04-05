@@ -22,7 +22,7 @@ class ExModel(nn.Module):
         self.vgg16.classifier = nn.Sequential(*features)
 
     def forward(self, image):
-        return self.forward_resnet(image)
+        return self.forward_vgg(image)
     
     def forward_resnet(self, image):
         # Get predictions from ResNet18

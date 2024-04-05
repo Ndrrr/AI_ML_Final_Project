@@ -18,8 +18,6 @@ save_model_path = "checkpoints/"
 pth_name = "saved_model.pth"
 
 
-
-
 def val(model, data_val, loss_function, writer, epoch, device):
     f1score = 0
     f1 = F1Score(num_classes=58, task = 'multiclass')
@@ -126,8 +124,10 @@ def train(model, train_loader, val_loader, optimizer, loss_fn, n_epochs, device)
 def main():
     device = "cuda"
     tr = transforms.Compose([
+        transforms.Resize(256),
+        transforms.CenterCrop(size=224),  # Image net standards
         transforms.ToTensor(),
-        transforms.Resize([224, 224])
+        transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
     ])
 
     train_data = custom_dataset("train", transforms=tr)
